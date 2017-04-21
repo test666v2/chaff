@@ -83,7 +83,7 @@ ALPHA_STRING+=$(/usr/bin/iostat | /usr/bin/shasum -a 512 | /usr/bin/awk '{print 
 #
 entropy_from_temperature () ### probably way over the top
 {
-   for (( CORE = 0; CORE <= NUMBER_OF_CORES; CORE++ )) # launch bc up to $NUMBER_OF_CORE + 1 threads, so for 4 cores we get 4 "simultaneous" threads
+   for (( CORE = 0; CORE <= NUMBER_OF_CORES; CORE++ )) # launch bc up to $NUMBER_OF_CORES + 1 threads, so for 4 cores we get 4 "simultaneous" threads
       do
          CPU_DURESS=$(( ( RANDOM % (( CPU_DURESS_MAX - CPU_DURESS_MIN + 1 )) )  + CPU_DURESS_MIN ))
          eval "taskset -c $CORE echo 2^2^$CPU_DURESS | /usr/bin/bc > /dev/null &"
