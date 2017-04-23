@@ -30,4 +30,4 @@ PS: one-liner ugly hacks to check the "randomness" of chaff.sh for 5 runs. Test 
 
 >user@computer:~$ **echo "chaff.sh output tested with rngtest (5 runs)" > /dev/shm/chaff_rngtest.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_rngtest.txt; chaff.sh --test;rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_rngtest.txt 2>&1;done**
 
->user@computer:~$ **echo "chaff.sh output tested with diehard (5 runs)" > /dev/shm/chaff_dieharder.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_dieharder.txt; chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_dieharder.txt 2>&1;done**
+>user@computer:~$ **echo "chaff.sh output tested with dieharder (5 runs)" > /dev/shm/chaff_dieharder.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_dieharder.txt; chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_dieharder.txt 2>&1;done**
