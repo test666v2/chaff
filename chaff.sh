@@ -54,7 +54,7 @@
 
 # Starting values for some variables
 
-ALPHA_STRING_SAVE_FILE=/dev/shm/.ALPHA_STRING_SAVE_FILE # or whatever you want, perhaps /tmp/.ALPHA_STRING_SAVE_FILE ?
+ALPHA_STRING_SAVE_FILE=/dev/shm/.ALPHA_STRING_SAVE_FILE
 CPU_DURESS_MAX=18 # 21 and more is way over the top # used to "disturb" possible predictability in temperature readings
 CPU_DURESS_MIN=11 # 10 or less will probably be irrelevant # used to "disturb" possible predictability in temperature readings
 DELAY_MAX=20 # in seconds # MAX interval between script looping
@@ -64,6 +64,7 @@ ENTROPY_ROUNDS_MIN=2 # 0 is poinless, but may introduce some "randomness"
 GET_ENTROPY_FROM_DATE=true
 GET_ENTROPY_FROM_IOSTAT=true
 GET_ENTROPY_FROM_PING=true
+GET_ENTROPY_FROM_PS_AUX=true
 GET_ENTROPY_FROM_TEMPERATURE=true # controversial; may lead to CPU instability because of random "spikiness" caused by bc # set to "false" to avoid this
 IP_TO_PING=0 # 0 is 127.0.0.1 # any other IP will introduce possible unwanted delays, but will probably increase "randomness" # do not ping public IPs
 NUMBER_OF_CORES=$(( $(grep -m 1 -i cores < /proc/cpuinfo | awk '{print $4}') -1 )) # for 4 cores the NUMBER_OF_CORES will be 3 # needed to create temperature increase while spiking CPUs
@@ -124,6 +125,15 @@ entropy_from_ping ()
 
 ########################################################
 
+entropy_from_ps_aux ()
+{
+   [ $GET_ENTROPY_FROM_PS_AUX ] || return
+   ALPHA_STRING=$(ps aux | shasum -a 512 | awk '{print $1}') # get only shasum from column 1
+   printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
+}
+
+########################################################
+
 exit_with_help_message ()
 {
    printf "\nchaff.sh without arguments for normal run\n\nchaff.sh --test for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)\n\nchaff.sh whatever will produce this helps message\n\n"
@@ -134,7 +144,7 @@ exit_with_help_message ()
 
 exit_with_test_message ()
 {
-   printf "\nOutputted file with random data: $RANDOM_CHARS_FILE\nTest this file against ent, rngtest and/or dieharder\n\n   ent $RANDOM_CHARS_FILE\n\n   rngtest< $RANDOM_CHARS_FILE\n   dieharder -a < $RANDOM_CHARS_FILE\n\n"
+   printf "\nOutputted file with random data: $RANDOM_CHARS_FILE\nTest this file against ent, rngtest and/or dieharder\n\n   ent $RANDOM_CHARS_FILE\n\n   rngtest < $RANDOM_CHARS_FILE\n   \n   dieharder -a < $RANDOM_CHARS_FILE\n\n"
    exit
 }
 
@@ -154,7 +164,7 @@ while true
       ENTROPY_GATHERING_ROUNDS=$(( ( RANDOM % (( ENTROPY_ROUNDS_MAX - ENTROPY_ROUNDS_MIN + 1 )) )  + ENTROPY_ROUNDS_MIN ))
       for (( i  = 1; i <= ENTROPY_GATHERING_ROUNDS; i++ )) # generate up to $ENTROPY_ROUNDS_MAX checksums from date (time), iostat, sensors (temperature) and ping
          do
-            WHAT_TO_DO=$(printf "1\n2\n3\n4" | shuf)
+            WHAT_TO_DO=$(printf "1\n2\n3\n4\n5" | shuf)
             echo "$WHAT_TO_DO" | \
                while read -r TO_DO
                   do
@@ -162,7 +172,8 @@ while true
                         1) entropy_from_date ;;
                         2) entropy_from_iostat ;;
                         3) entropy_from_temperature ;;
-                        4) entropy_from_ping
+                        4) entropy_from_ping ;;
+                        5) entropy_from_ps_aux
                      esac
                   done
          done
