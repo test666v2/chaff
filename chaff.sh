@@ -136,7 +136,7 @@ entropy_from_ps_aux ()
 
 exit_with_help_message ()
 {
-   printf "\nchaff-sh gathers \"randomized\" data from 5 sources : date, iostat, temperature (please verify ahead in the script), ping and ps\n\nchaff.sh without arguments for normal run\n\nchaff.sh --test for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)\n\nchaff.sh whatever will produce this help message\n\n"
+   printf "\nchaff.sh gathers \"randomized\" data from 5 sources : date, iostat, temperature (please verify ahead in the script), ping and ps\n\nchaff.sh without arguments for normal run\n\nchaff.sh --test for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)\n\nchaff.sh whatever will produce this help message\n\n"
    exit
 }
 
