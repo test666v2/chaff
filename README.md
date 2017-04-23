@@ -1,6 +1,6 @@
 chaff.sh
 
-Purpose: Add additional pseudo-randomness to /dev/random from 5 sources : date, iostat, temperature (please verify ahead in the script), ping and ps
+Purpose: Add additional pseudo-randomness to /dev/random from 5 sources : date, iostat, temperature (please verify that in the script), ping and ps
 
 Please install sensors package or set variable GET_ENTROPY_FROM_TEMPERATURE to false
 
