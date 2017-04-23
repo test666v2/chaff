@@ -70,7 +70,9 @@ RANDOM_ROUNDS_MIN=1 # 0 is poinless, but may introduce some "randomness"
 entropy_from_date ()
 {
    [ $GET_ENTROPY_FROM_DATE ] || return
-   ALPHA_STRING+=$(/bin/date +%s%N | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+#   ALPHA_STRING+=$(/bin/date +%s%N | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   ALPHA_STRING=$(/bin/date +%s%N | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
 
 ########################################################
@@ -78,7 +80,9 @@ entropy_from_date ()
 entropy_from_iostat ()
 {
    [ $GET_ENTROPY_FROM_IOSTAT ] || return
-   ALPHA_STRING+=$(/usr/bin/iostat | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+#   ALPHA_STRING+=$(/usr/bin/iostat | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   ALPHA_STRING=$(/usr/bin/iostat | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
 
 ########################################################
@@ -99,7 +103,8 @@ entropy_from_temperature () ### probably way over the top
             [ "$TEST" == "/usr/bin/bc" ] || BC_IN_MEM=false
             sleep 0.2
          done
-   ALPHA_STRING+=$(/usr/bin/sensors -u | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # poll temperatures from sensors, get only shasum from column 1
+   ALPHA_STRING=$(/usr/bin/sensors -u | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # poll temperatures from sensors, get only shasum from column 1
+   printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
 
 ########################################################
@@ -107,13 +112,15 @@ entropy_from_temperature () ### probably way over the top
 entropy_from_ping ()
 {
    [ $GET_ENTROPY_FROM_PING ] || return
-   ALPHA_STRING+=$(/bin/ping -i $PING_INTERVAL -c $NUMBER_OF_PINGS $IP_TO_PING | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   ALPHA_STRING=$(/bin/ping -i $PING_INTERVAL -c $NUMBER_OF_PINGS $IP_TO_PING | /usr/bin/shasum -a 512 | /usr/bin/awk '{print $1}') # get only shasum from column 1
+   printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
 
 ########################################################
 
 # MAIN
-
+/usr/bin/printf "" > $ALPHA_STRING_SAVE_FILE
+/bin/cat /dev/null > $RANDOM_CHARS_FILE
 while true
    do
       ENTROPY_GATHERING_ROUNDS=$(( ( RANDOM % (( RANDOM_ROUNDS_MAX - RANDOM_ROUNDS_MIN + 1 )) )  + RANDOM_ROUNDS_MIN ))
@@ -130,17 +137,16 @@ while true
                         4) entropy_from_ping
                      esac
                   done
-            /usr/bin/printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE # because $ALPHA_STRING will be destroyed on leaving the pipe or loop
          done
 BETA_STRING=$(/usr/bin/fold -w1 < $ALPHA_STRING_SAVE_FILE | /usr/bin/shuf | /usr/bin/tr -d '\n' | /usr/bin/fold -w2) # break output from $ALPHA_STRING_SAVE_FILE in 1 character lines, mix (shuf), remove line break,  break again but in 2 characters lines
+      /usr/bin/printf "" > $ALPHA_STRING_SAVE_FILE
       echo "$BETA_STRING" | \
          while read -r HEXOR
             do
                /usr/bin/printf "\x$HEXOR" >> $RANDOM_CHARS_FILE # printf each line as hexadecimal coded characters to $RANDOM_CHARS_FILE
             done
       /bin/cat $RANDOM_CHARS_FILE > /dev/random # feed $RANDOM_CHARS_FILE to the /dev/random pool
-      /usr/bin/printf "" > $ALPHA_STRING_SAVE_FILE # generate an empty ALPHA_STRING_SAVE_FILE # more than one way to skin a cat
-      /bin/cat /dev/null > $RANDOM_CHARS_FILE # generate an empty $RANDOM_CHARS_FILE # more than one way to skin a cat
+      /bin/cat /dev/null > $RANDOM_CHARS_FILE
       DELAY=$(( ( RANDOM % (( DELAY_MAX - DELAY_MIN + 1 )) )  + DELAY_MIN ))
       /bin/sleep $DELAY
    done
