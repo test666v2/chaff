@@ -20,7 +20,7 @@ In a terminal window:
 
 run from cron as a local user: edit cron in a terminal window with "crontab -e" and add "@reboot /your/path/here/chaff.sh", save and exit and reboot
 
-Adapt as needed (perhaps modifying **/dev/shm/** to **tmp/** in the script and in the one-liner)
+Adapt as needed (perhaps modifying the path where chaff.sh stores data, **/dev/shm/**, to **/tmp/** in the script and in the one-liner below)
 
 EARLY ALPHA - YOU HAVE BEEN WARNED
 
