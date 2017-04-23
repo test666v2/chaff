@@ -26,8 +26,8 @@ EARLY ALPHA - YOU HAVE BEEN WARNED
 
 PS: one-liner ugly hacks to check the "randomness" of chaff.sh for 5 runs. Test mostly fails with rngtest because of the small sample produced some of the times. Can be very slow with dieharder.
 
->user@computer:~$ **echo "chaff.sh output tested with ent (5 runs)" > /dev/shm/chaff_ent.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_ent.txt; chaff.sh --test;ent /dev/shm/.random.hex >> /dev/shm/chaff_ent.txt 2>&1;done**
+>user@computer:~$ **echo "chaff.sh output tested with ent (5 runs)" > /dev/shm/chaff_ent.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_ent.txt; /your/path/here/chaff.sh --test; ent /dev/shm/.random.hex >> /dev/shm/chaff_ent.txt 2>&1;done**
 
->user@computer:~$ **echo "chaff.sh output tested with rngtest (5 runs)" > /dev/shm/chaff_rngtest.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_rngtest.txt; chaff.sh --test;rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_rngtest.txt 2>&1;done**
+>user@computer:~$ **echo "chaff.sh output tested with rngtest (5 runs)" > /dev/shm/chaff_rngtest.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_rngtest.txt; /your/path/here/chaff.sh --test; rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_rngtest.txt 2>&1;done**
 
->user@computer:~$ **echo "chaff.sh output tested with dieharder (5 runs)" > /dev/shm/chaff_dieharder.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_dieharder.txt; chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_dieharder.txt 2>&1;done**
+>user@computer:~$ **echo "chaff.sh output tested with dieharder (5 runs)" > /dev/shm/chaff_dieharder.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_dieharder.txt; /your/path/here/chaff.sh --test; dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_dieharder.txt 2>&1;done**
