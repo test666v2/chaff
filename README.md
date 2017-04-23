@@ -24,6 +24,10 @@ Adapt as needed (perhaps modifying the path where chaff.sh stores data, **/dev/s
 
 EARLY ALPHA - YOU HAVE BEEN WARNED
 
-PS: one-liner hack to check the "randomness" of chaff.sh for 10 runs. But prepare to wait, and wait, and wait:
+PS: one-liner hacks to check the "randomness" of chaff.sh for 10 runs (can be very slow withdieharder):
 
->user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_test.txt;done**
+>user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;ent /dev/shm/.random.hex >> /dev/shm/chaff_test_ent.txt;done**
+
+>user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_test.txt_rngtest;done**
+
+>user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_test.txt_dieharder;done**
