@@ -8,8 +8,16 @@ The terms "random", "randomized" and "randomness" are here loosely used and do n
 
 It would be better to have a reliable hardware RNG or install haveged and be less happy, or both, or to be a tin-foil hat moron and run chaff.sh alongside haveged
 
-In a terminal window: "chmod +x /your/path/here/chaff.sh" to make the script executable
+In a terminal window: 
 
-run from cron: edit, as root, cron in a terminal window with "crontab -e" and add "@reboot /your/path/here/chaff.sh", save and exit and reboot
+>user@computer:~$ **/chmod +x /your/path/here/chaff.sh"** to make the script executable
+
+>user@computer:~$ **/your/path/here/chaff.sh** without arguments for a normal run
+
+>user@computer:~$ **/your/path/here/chaff.sh --test** for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)
+
+>user@computer:~$ **/your/path/here/chaff.sh**  whatever will produce a help message
+
+run from cron as a local user: edit cron in a terminal window with "crontab -e" and add "@reboot /your/path/here/chaff.sh", save and exit and reboot
 
 EARLY ALPHA - YOU HAVE BEEN WARNED
