@@ -10,13 +10,13 @@ It would be better to have a reliable hardware RNG or install haveged and be les
 
 In a terminal window: 
 
->user@computer:~$ **/chmod +x /your/path/here/chaff.sh"** to make the script executable
+>user@computer:~$ **/your/path/here/chmod.sh +x /your/path/here/chaff.sh"** to make the script executable
 
 >user@computer:~$ **/your/path/here/chaff.sh** without arguments for a normal run
 
 >user@computer:~$ **/your/path/here/chaff.sh --test** for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)
 
->user@computer:~$ **/your/path/here/chaff.sh**  whatever will produce a help message
+>user@computer:~$ **/your/path/here/chaff.sh whatever** will produce a help message
 
 run from cron as a local user: edit cron in a terminal window with "crontab -e" and add "@reboot /your/path/here/chaff.sh", save and exit and reboot
 
