@@ -4,7 +4,8 @@
 # info for shellcheck error SC2059
 # this refers to shellcheck beeing too restrictive with msg "Don't use variables in the printf format string. (..)"; ignoring this is not an issue
 ###################################################
- chaff.sh
+
+# chaff.sh
 
 # Purpose: Add additional pseudo-randomness to /dev/random from 4 sources : date, iostat, temperature (please verify ahead in the script) and ping
 
@@ -64,7 +65,7 @@ GET_ENTROPY_FROM_DATE=true
 GET_ENTROPY_FROM_IOSTAT=true
 GET_ENTROPY_FROM_PING=true
 GET_ENTROPY_FROM_TEMPERATURE=true # controversial; may lead to CPU instability because of random "spikiness" caused by bc # set to "false" to avoid this
-IP_TO_PING=192.168.1.254 # 0 is 127.0.0.1 # any other IP will introduce possible unwanted delays, but will probably increase "randomness" # do not ping public IPs
+IP_TO_PING=0 # 0 is 127.0.0.1 # any other IP will introduce possible unwanted delays, but will probably increase "randomness" # do not ping public IPs
 NUMBER_OF_CORES=$(( $(grep -m 1 -i cores < /proc/cpuinfo | awk '{print $4}') -1 )) # for 4 cores the NUMBER_OF_CORES will be 3 # needed to create temperature increase while spiking CPUs
 NUMBER_OF_PINGS=4
 PING_INTERVAL=0.2 # 0.2 for interval between pings, have to be root for lower value
