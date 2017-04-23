@@ -7,7 +7,7 @@
 
 # chaff.sh
 
-# Purpose: Add additional pseudo-randomness to /dev/random from 4 sources : date, iostat, temperature (please verify ahead in the script) and ping
+# Purpose: Add additional pseudo-randomness to /dev/random from 5 sources : date, iostat, temperature (please verify ahead in the script), ping and ps
 
 # Please install bc, sensors and systat packages
 
@@ -66,7 +66,7 @@ GET_ENTROPY_FROM_IOSTAT=true
 GET_ENTROPY_FROM_PING=true
 GET_ENTROPY_FROM_PS_AUX=true
 GET_ENTROPY_FROM_TEMPERATURE=true # controversial; may lead to CPU instability because of random "spikiness" caused by bc # set to "false" to avoid this
-IP_TO_PING=0 # 0 is 127.0.0.1 # any other IP will introduce possible unwanted delays, but will probably increase "randomness" # do not ping public IPs
+IP_TO_PING=192.168.1.254 # 0 is 127.0.0.1 # any other IP will introduce possible unwanted delays, but will probably increase "randomness" # do not ping public IPs
 NUMBER_OF_CORES=$(( $(grep -m 1 -i cores < /proc/cpuinfo | awk '{print $4}') -1 )) # for 4 cores the NUMBER_OF_CORES will be 3 # needed to create temperature increase while spiking CPUs
 NUMBER_OF_PINGS=4
 PING_INTERVAL=0.2 # 0.2 for interval between pings, have to be root for lower value
@@ -136,7 +136,7 @@ entropy_from_ps_aux ()
 
 exit_with_help_message ()
 {
-   printf "\nchaff.sh without arguments for normal run\n\nchaff.sh --test for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)\n\nchaff.sh whatever will produce this helps message\n\n"
+   printf "\nchaff-sh gathers \"randomized\" data from 5 sources : date, iostat, temperature (please verify ahead in the script), ping and ps\n\nchaff.sh without arguments for normal run\n\nchaff.sh --test for building file $RANDOM_CHARS_FILE that can be tested against random number analysers (ent, rngtest, dieharder or any other tool)\n\nchaff.sh whatever will produce this help message\n\n"
    exit
 }
 
