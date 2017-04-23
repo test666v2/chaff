@@ -10,7 +10,7 @@ It would be better to have a reliable hardware RNG or install haveged and be les
 
 In a terminal window: 
 
->user@computer:~$ **/your/path/here/chmod.sh +x /your/path/here/chaff.sh"** to make the script executable
+>user@computer:~$ **/your/path/here/chmod.sh +x /your/path/here/chaff.sh** to make the script executable
 
 >user@computer:~$ **/your/path/here/chaff.sh** without arguments for a normal run
 
