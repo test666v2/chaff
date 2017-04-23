@@ -24,10 +24,10 @@ Adapt as needed (perhaps modifying the path where chaff.sh stores data, **/dev/s
 
 EARLY ALPHA - YOU HAVE BEEN WARNED
 
-PS: one-liner hacks to check the "randomness" of chaff.sh for 10 runs (can be very slow with dieharder):
+PS: one-liner ugly hacks to check the "randomness" of chaff.sh for 5 runs. Test mostly fails with rngtest because of the small sample produced some of the times. Can be very slow with dieharder.
 
->user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;ent /dev/shm/.random.hex >> /dev/shm/chaff_test_ent.txt;done**
+>user@computer:~$ **echo "chaff.sh output tested with ent (5 runs)" > /dev/shm/chaff_ent.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_ent.txt; chaff.sh --test;ent /dev/shm/.random.hex >> /dev/shm/chaff_ent.txt 2>&1;done**
 
->user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_test.txt_rngtest;done**
+>user@computer:~$ **echo "chaff.sh output tested with rngtest (5 runs)" > /dev/shm/chaff_rngtest.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_rngtest.txt; chaff.sh --test;rngtest < /dev/shm/.random.hex >> /dev/shm/chaff_rngtest.txt 2>&1;done**
 
->user@computer:~$ **for (( i  = 1; i <= 10; i++ )) do /your/path/here/chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_test.txt_dieharder;done**
+>user@computer:~$ **echo "chaff.sh output tested with diehard (5 runs)" > /dev/shm/chaff_dieharder.txt; for (( i  = 1; i <= 5; i++ )) do printf "\n\n=====\n\n" >>/dev/shm/chaff_dieharder.txt; chaff.sh --test;dieharder -a < /dev/shm/.random.hex >> /dev/shm/chaff_dieharder.txt 2>&1;done**
