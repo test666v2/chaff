@@ -54,7 +54,7 @@
 
 # Starting values for some variables
 
-ALPHA_STRING_SAVE_FILE=/dev/shm/.ALPHA_STRING_SAVE_FILE
+ALPHA_STRING_SAVE_FILE=/dev/shm/.ALPHA_STRING_SAVE_FILE # or whatever you want, perhaps /tmp/.ALPHA_STRING_SAVE_FILE ?
 CPU_DURESS_MAX=18 # 21 and more is way over the top # used to "disturb" possible predictability in temperature readings
 CPU_DURESS_MIN=11 # 10 or less will probably be irrelevant # used to "disturb" possible predictability in temperature readings
 DELAY_MAX=20 # in seconds # MAX interval between script looping
