@@ -61,7 +61,8 @@ DELAY_MAX=20 # in seconds # MAX interval between script looping
 DELAY_MIN=5 # in seconds # MIN interval between script looping
 ENTROPY_ROUNDS_MAX=10 # number of loops for sequential checksums from date (time), iostat, sensors (temperature) and ping # randomized order of execution
 ENTROPY_ROUNDS_MIN=1 # 0 is poinless, but may introduce some "randomness"
-GATHER_ALL_RANDOMNESS=true # set to false and on entering the subroutine to gather random data, will make a random choice (0 or 1) and if "1" will exit and if "0" will continue
+GATHER_ALL_RANDOMNESS=true # will always execute the subroutine if true
+GATHER_ALL_RANDOMNESS_BIAS=4 # minimum is 2; for a BIAS of 4, there are 1 in 4 chances (25%) of leaving the subroutine without executing it; has no effect if GATHER_ALL_RANDOMNESS=true
 GET_ENTROPY_FROM_DATE=true
 GET_ENTROPY_FROM_IOSTAT=true
 GET_ENTROPY_FROM_PING=true
@@ -77,8 +78,8 @@ RANDOM_CHARS_FILE="/dev/shm/.random.hex" # or whatever you want, perhaps /tmp/.r
 
 entropy_from_date ()
 {
-   [ $GET_ENTROPY_FROM_DATE ] || return
-   $GATHER_ALL_RANDOMNESS || ( [ $((RANDOM % 2)) == 0 ] || return ) # exit this subroutine if 2 conditions are met: 1) GATHER_ALL_RANDOMNESS=false; 2) random number produced is 1
+   $GET_ENTROPY_FROM_DATE || return
+   $GATHER_ALL_RANDOMNESS || (($((RANDOM % $GATHER_ALL_RANDOMNESS_BIAS)) != 0 )) || return
    ALPHA_STRING=$(date +%s%N | shasum -a 512 | awk '{print $1}') # get only shasum from column 1
    printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
@@ -87,8 +88,8 @@ entropy_from_date ()
 
 entropy_from_iostat ()
 {
-   [ $GET_ENTROPY_FROM_IOSTAT ] || return
-   $GATHER_ALL_RANDOMNESS || ( [ $((RANDOM % 2)) == 0 ] || return ) # exit this subroutine if 2 conditions are met: 1) $GATHER_ALL_RANDOMNESS=false; 2) random number produced is 1
+   $GET_ENTROPY_FROM_IOSTAT || return
+   $GATHER_ALL_RANDOMNESS || (($((RANDOM % $GATHER_ALL_RANDOMNESS_BIAS)) != 0 )) || return
    ALPHA_STRING=$(iostat | shasum -a 512 | awk '{print $1}') # get only shasum from column 1
    printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
@@ -97,8 +98,8 @@ entropy_from_iostat ()
 
 entropy_from_temperature () ### probably way over the top
 {
-   [ $GET_ENTROPY_FROM_TEMPERATURE ] || return
-   $GATHER_ALL_RANDOMNESS || ( [ $((RANDOM % 2)) == 0 ] || return ) # exit this subroutine if 2 conditions are met: 1) $GATHER_ALL_RANDOMNESS=false; 2) random number produced is 1
+   $GET_ENTROPY_FROM_TEMPERATURE || return
+   $GATHER_ALL_RANDOMNESS || (($((RANDOM % $GATHER_ALL_RANDOMNESS_BIAS)) != 0 )) || return
    for (( CORE = 0; CORE <= NUMBER_OF_CORES; CORE++ )) # launch bc up to $NUMBER_OF_CORES + 1 threads, so for 4 cores we get 4 "simultaneous" threads
       do
          CPU_DURESS=$(( ( RANDOM % (( CPU_DURESS_MAX - CPU_DURESS_MIN + 1 )) )  + CPU_DURESS_MIN ))
@@ -120,8 +121,8 @@ entropy_from_temperature () ### probably way over the top
 
 entropy_from_ping ()
 {
-   [ $GET_ENTROPY_FROM_PING ] || return
-   $GATHER_ALL_RANDOMNESS || ( [ $((RANDOM % 2)) == 0 ] || return ) # exit this subroutine if 2 conditions are met: 1) $GATHER_ALL_RANDOMNESS=false; 2) random number produced is 1
+   $GET_ENTROPY_FROM_PING || return
+   $GATHER_ALL_RANDOMNESS || (($((RANDOM % $GATHER_ALL_RANDOMNESS_BIAS)) != 0 )) || return
    ALPHA_STRING=$(ping -i $PING_INTERVAL -c $NUMBER_OF_PINGS $IP_TO_PING | shasum -a 512 | awk '{print $1}') # get only shasum from column 1
    printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
@@ -130,8 +131,8 @@ entropy_from_ping ()
 
 entropy_from_ps_aux ()
 {
-   [ $GET_ENTROPY_FROM_PS_AUX ] || return
-   $GATHER_ALL_RANDOMNESS || ( [ $((RANDOM % 2)) == 0 ] || return ) # exit this subroutine if 2 conditions are met: 1) $GATHER_ALL_RANDOMNESS=false; 2) random number produced is 1
+   $GET_ENTROPY_FROM_PS_AUX || return
+   $GATHER_ALL_RANDOMNESS || (($((RANDOM % $GATHER_ALL_RANDOMNESS_BIAS)) != 0 )) || return
    ALPHA_STRING=$(ps aux | shasum -a 512 | awk '{print $1}') # get only shasum from column 1
    printf "$ALPHA_STRING" >> $ALPHA_STRING_SAVE_FILE
 }
